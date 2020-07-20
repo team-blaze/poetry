@@ -23,6 +23,10 @@ class InstalledRepository(Repository):
                 metadata.distributions(path=[entry]), key=lambda d: str(d._path),
             ):
                 name = distribution.metadata["name"]
+                # Fix for https://github.com/python-poetry/poetry/issues/1953
+                if not name:
+                    continue
+
                 path = Path(str(distribution._path))
                 version = distribution.metadata["version"]
                 package = Package(name, version, version)
